@@ -8,14 +8,15 @@ const TableNameRole = "roles"
 
 // Role mapped from table <roles>
 type Role struct {
-	CreatedAt  int64  `gorm:"column:created_at" json:"created_at"`
-	CreatedBy  string `gorm:"column:created_by" json:"created_by"`
-	ModifiedAt int64  `gorm:"column:modified_at" json:"modified_at"`
-	ModifiedBy string `gorm:"column:modified_by" json:"modified_by"`
-	DeletedAt  int64  `gorm:"column:deleted_at" json:"deleted_at"`
-	DeletedBy  string `gorm:"column:deleted_by" json:"deleted_by"`
-	RoleID     string `gorm:"column:role_id;primaryKey" json:"role_id"`
-	RoleName   string `gorm:"column:role_name;not null" json:"role_name"`
+	CreatedAt  *int64             `gorm:"column:created_at;type:bigint" json:"created_at"`
+	CreatedBy  *string            `gorm:"column:created_by;type:character varying(255)" json:"created_by"`
+	ModifiedAt *int64             `gorm:"column:modified_at;type:bigint" json:"modified_at"`
+	ModifiedBy *string            `gorm:"column:modified_by;type:character varying(255)" json:"modified_by"`
+	DeletedAt  *int64             `gorm:"column:deleted_at;type:bigint" json:"deleted_at"`
+	DeletedBy  *string            `gorm:"column:deleted_by;type:character varying(255)" json:"deleted_by"`
+	RoleID     string             `gorm:"column:role_id;type:character varying(255);primaryKey" json:"role_id"`
+	RoleName   string             `gorm:"column:role_name;type:character varying(255);not null" json:"role_name"`
+	RolesNav   []*RolesNavigation `gorm:"foreignKey:role_id;references:role_id" json:"roles_nav,omitempty"`
 }
 
 // TableName Role's table name

@@ -17,7 +17,6 @@ import (
 
 var (
 	Q               = new(Query)
-	Dummy           *dummy
 	Navigation      *navigation
 	Role            *role
 	RolesNavigation *rolesNavigation
@@ -25,7 +24,6 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
-	Dummy = &Q.Dummy
 	Navigation = &Q.Navigation
 	Role = &Q.Role
 	RolesNavigation = &Q.RolesNavigation
@@ -34,7 +32,6 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:              db,
-		Dummy:           newDummy(db, opts...),
 		Navigation:      newNavigation(db, opts...),
 		Role:            newRole(db, opts...),
 		RolesNavigation: newRolesNavigation(db, opts...),
@@ -44,7 +41,6 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 type Query struct {
 	db *gorm.DB
 
-	Dummy           dummy
 	Navigation      navigation
 	Role            role
 	RolesNavigation rolesNavigation
@@ -55,7 +51,6 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:              db,
-		Dummy:           q.Dummy.clone(db),
 		Navigation:      q.Navigation.clone(db),
 		Role:            q.Role.clone(db),
 		RolesNavigation: q.RolesNavigation.clone(db),
@@ -73,7 +68,6 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:              db,
-		Dummy:           q.Dummy.replaceDB(db),
 		Navigation:      q.Navigation.replaceDB(db),
 		Role:            q.Role.replaceDB(db),
 		RolesNavigation: q.RolesNavigation.replaceDB(db),
@@ -81,7 +75,6 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
-	Dummy           IDummyDo
 	Navigation      INavigationDo
 	Role            IRoleDo
 	RolesNavigation IRolesNavigationDo
@@ -89,7 +82,6 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Dummy:           q.Dummy.WithContext(ctx),
 		Navigation:      q.Navigation.WithContext(ctx),
 		Role:            q.Role.WithContext(ctx),
 		RolesNavigation: q.RolesNavigation.WithContext(ctx),

@@ -8,14 +8,16 @@ const TableNameRolesNavigation = "roles_navigation"
 
 // RolesNavigation mapped from table <roles_navigation>
 type RolesNavigation struct {
-	RoleNavigationID int32  `gorm:"column:role_navigation_id;primaryKey;autoIncrement:true" json:"role_navigation_id"`
-	RoleID           string `gorm:"column:role_id;not null" json:"role_id"`
-	NavigationID     string `gorm:"column:navigation_id;not null" json:"navigation_id"`
-	AllowRead        bool   `gorm:"column:allow_read;not null" json:"allow_read"`
-	AllowCreate      bool   `gorm:"column:allow_create;not null" json:"allow_create"`
-	AllowUpdate      bool   `gorm:"column:allow_update;not null" json:"allow_update"`
-	AllowDelete      bool   `gorm:"column:allow_delete;not null" json:"allow_delete"`
-	AllowApproval    bool   `gorm:"column:allow_approval;not null" json:"allow_approval"`
+	RoleNavigationID int32       `gorm:"column:role_navigation_id;type:integer;primaryKey;autoIncrement:true" json:"role_navigation_id"`
+	RoleID           string      `gorm:"column:role_id;type:character varying(255);not null" json:"role_id"`
+	NavigationID     string      `gorm:"column:navigation_id;type:character varying(255);not null" json:"navigation_id"`
+	AllowRead        bool        `gorm:"column:allow_read;type:boolean;not null" json:"allow_read"`
+	AllowCreate      bool        `gorm:"column:allow_create;type:boolean;not null" json:"allow_create"`
+	AllowUpdate      bool        `gorm:"column:allow_update;type:boolean;not null" json:"allow_update"`
+	AllowDelete      bool        `gorm:"column:allow_delete;type:boolean;not null" json:"allow_delete"`
+	AllowApproval    bool        `gorm:"column:allow_approval;type:boolean;not null" json:"allow_approval"`
+	Role             *Role       `gorm:"foreignKey:role_id;references:role_id" json:"role"`
+	Navigation       *Navigation `gorm:"foreignKey:navigation_id;references:navigation_id" json:"navigation"`
 }
 
 // TableName RolesNavigation's table name

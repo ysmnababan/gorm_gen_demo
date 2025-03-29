@@ -8,18 +8,19 @@ const TableNameNavigation = "navigation"
 
 // Navigation mapped from table <navigation>
 type Navigation struct {
-	CreatedAt          int64  `gorm:"column:created_at" json:"created_at"`
-	CreatedBy          string `gorm:"column:created_by" json:"created_by"`
-	ModifiedAt         int64  `gorm:"column:modified_at" json:"modified_at"`
-	ModifiedBy         string `gorm:"column:modified_by" json:"modified_by"`
-	DeletedAt          int64  `gorm:"column:deleted_at" json:"deleted_at"`
-	DeletedBy          string `gorm:"column:deleted_by" json:"deleted_by"`
-	NavigationID       string `gorm:"column:navigation_id;primaryKey" json:"navigation_id"`
-	NavigationName     string `gorm:"column:navigation_name;not null" json:"navigation_name"`
-	ParentNavigationID string `gorm:"column:parent_navigation_id" json:"parent_navigation_id"`
-	SortOrder          int32  `gorm:"column:sort_order;not null" json:"sort_order"`
-	URLPath            string `gorm:"column:url_path" json:"url_path"`
-	IsActive           bool   `gorm:"column:is_active;default:true" json:"is_active"`
+	CreatedAt          *int64             `gorm:"column:created_at;type:bigint" json:"created_at"`
+	CreatedBy          *string            `gorm:"column:created_by;type:character varying(255)" json:"created_by"`
+	ModifiedAt         *int64             `gorm:"column:modified_at;type:bigint" json:"modified_at"`
+	ModifiedBy         *string            `gorm:"column:modified_by;type:character varying(255)" json:"modified_by"`
+	DeletedAt          *int64             `gorm:"column:deleted_at;type:bigint" json:"deleted_at"`
+	DeletedBy          *string            `gorm:"column:deleted_by;type:character varying(255)" json:"deleted_by"`
+	NavigationID       string             `gorm:"column:navigation_id;type:character varying(255);primaryKey" json:"navigation_id"`
+	NavigationName     string             `gorm:"column:navigation_name;type:character varying(255);not null" json:"navigation_name"`
+	ParentNavigationID *string            `gorm:"column:parent_navigation_id;type:character varying(255)" json:"parent_navigation_id"`
+	SortOrder          int32              `gorm:"column:sort_order;type:integer;not null" json:"sort_order"`
+	URLPath            *string            `gorm:"column:url_path;type:character varying(255)" json:"url_path"`
+	IsActive           *bool              `gorm:"column:is_active;type:boolean;default:true" json:"is_active"`
+	RolesNav           []*RolesNavigation `gorm:"foreignKey:navigation_id;references:navigation_id" json:"roles_nav"`
 }
 
 // TableName Navigation's table name
