@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"gorm_demo/handler"
 	"gorm_demo/src/query"
 	"log"
 
@@ -47,18 +49,14 @@ func main() {
 	// for _, val := range role {
 	// 	fmt.Println(*val)
 	// }
-
-	n := query.Navigation
-	navigations, _ := n.Debug().
-		Select(n.NavigationID, n.NavigationName, n.ParentNavigationID, n.URLPath, n.SortOrder).
-		Where(n.IsActive.Is(true)).
-		Where(n.DeletedAt.IsNull()).
-		Find()
+	handler := handler.NewHandler(query.Q)
+	navigations, _ := handler.ListNav(context.Background())
 	for _, val := range navigations {
 		fmt.Println(val)
 	}
 	rn := query.RolesNavigation
 	navs := []*NavigationItem{}
+	n := query.Navigation
 	n.Debug().
 		Select(n.NavigationID, n.NavigationName, n.ParentNavigationID, n.URLPath, n.SortOrder, rn.AllowRead, rn.AllowCreate, rn.AllowUpdate, rn.AllowDelete, rn.AllowApproval).
 		Join(rn, rn.NavigationID.EqCol(n.NavigationID), rn.AllowRead.Is(true)).Join(r, r.RoleID.EqCol(rn.RoleID)).
@@ -70,7 +68,11 @@ func main() {
 	}
 
 	fmt.Println("here")
-	role, _ := r.Debug().Preload(r.RolesNav).Where(r.RoleID.Eq("7a22dda3-2272-45bb-9add-93c8763e7c38")).First()
+	role, err := r.Debug().Preload(r.RolesNav).Where(r.RoleID.Eq("7a22dda3-2272-45bb-9add-93c8763e7c38")).First()
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 	fmt.Println(role.RoleID, role.RoleName)
 	rolenav := role.RolesNav
 	for _, val := range rolenav {
